@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aliim Walid Portfolio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Data and systems analyst in Singapore. I build the pipelines, databases and tools that turn messy operations into clean data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: schematic hero (data flow diagram) beside the thesis, then case studies on a two-column spec grid: meta rail left, story right. */
+:root{
+  --paper:#EDF1EE; --surface:#F8FAF8; --ink:#121A17; --muted:#56625C; --line:#C9D3CD;
+  --accent:#2B45C9; --accent-soft:#DDE2F7; --signal:#C9721F;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --wrap:1080px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F1412; --surface:#161D1A; --ink:#E6ECE8; --muted:#94A39B; --line:#2B3631;
+    --accent:#8EA2FF; --accent-soft:#1D2547; --signal:#F0A452; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0F1412; --surface:#161D1A; --ink:#E6ECE8; --muted:#94A39B; --line:#2B3631;
+  --accent:#8EA2FF; --accent-soft:#1D2547; --signal:#F0A452; color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{margin:0}
+img{max-width:100%}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:var(--f-body); font-size:17px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{
+  max-width:var(--wrap); margin:0 auto;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+}
+a{color:var(--accent); text-underline-offset:3px}
+a:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+h1,h2,h3{font-family:var(--f-display); text-wrap:balance; margin:0; line-height:1.08}
+p{margin:0}
+.mono{font-family:var(--f-mono); font-size:12.5px; letter-spacing:.04em}
+.label{font-family:var(--f-mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
+
+/* Top bar */
+.top{padding-block:22px; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap}
+.top .mark{font-family:var(--f-display); font-weight:800; font-size:18px; letter-spacing:-.01em}
+.top nav{display:flex; gap:20px; flex-wrap:wrap}
+.top nav a{color:var(--muted); text-decoration:none; font-size:15px}
+.top nav a:hover{color:var(--ink)}
+
+/* Hero */
+.hero{display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); gap:48px; align-items:center; padding-block:40px 72px}
+.hero h1{font-size:clamp(2.5rem, 6.4vw, 4.6rem); font-weight:800; letter-spacing:-.035em}
+.hero h1 em{font-style:normal; color:var(--accent)}
+.hero .who{display:flex; align-items:center; gap:10px; margin-bottom:22px}
+.dot{width:8px; height:8px; border-radius:50%; background:var(--signal); box-shadow:0 0 0 4px color-mix(in srgb, var(--signal) 22%, transparent)}
+.hero .lede{margin-top:24px; max-width:34em; color:var(--muted); font-size:18px}
+.cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:30px}
+.btn{display:inline-flex; align-items:center; gap:8px; padding:11px 18px; border-radius:6px; font-weight:600; font-size:15px; text-decoration:none; border:1px solid var(--ink); color:var(--ink)}
+.btn.primary{background:var(--ink); color:var(--paper)}
+.btn:hover{transform:translateY(-1px)}
+.btn:focus-visible{outline:2px solid var(--accent); outline-offset:3px}
+
+.schematic{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:18px 16px 14px; min-width:0}
+.schematic svg{width:100%; height:auto; display:block}
+.schematic .cap{display:flex; justify-content:space-between; gap:12px; margin-top:8px; flex-wrap:wrap}
+.node{fill:var(--paper); stroke:var(--line)}
+.node.hub{fill:var(--accent-soft); stroke:var(--accent)}
+.node.out{fill:var(--surface); stroke:var(--ink)}
+.nt{font-family:var(--f-body); font-size:13px; fill:var(--ink); font-weight:600}
+.ns{font-family:var(--f-mono); font-size:10.5px; fill:var(--muted); letter-spacing:.03em}
+.wire{fill:none; stroke:var(--line); stroke-width:1.5}
+.wire.live{stroke:var(--accent); stroke-width:1.6; stroke-dasharray:3 5}
+.pkt{fill:var(--signal)}
+@media (prefers-reduced-motion: reduce){ .pkt{display:none} .btn:hover{transform:none} }
+
+/* Sections */
+section{padding-block:72px; border-top:1px solid var(--line)}
+.sec-head{display:flex; justify-content:space-between; align-items:baseline; gap:16px; flex-wrap:wrap; margin-bottom:40px}
+.sec-head h2{font-size:clamp(1.8rem, 3.6vw, 2.5rem); font-weight:700; letter-spacing:-.025em}
+.sec-head p{color:var(--muted); max-width:30em}
+
+/* Case studies */
+.case{display:grid; grid-template-columns:240px minmax(0,1fr); gap:40px; padding-block:40px; border-top:1px dashed var(--line)}
+.case:first-of-type{border-top:0; padding-top:0}
+.meta{display:flex; flex-direction:column; gap:18px; min-width:0}
+.meta .kind{color:var(--accent)}
+.meta dl{margin:0; display:grid; gap:12px}
+.meta dt{font-family:var(--f-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
+.meta dd{margin:2px 0 0; font-size:15px}
+.tags{display:flex; flex-wrap:wrap; gap:6px}
+.tag{font-family:var(--f-mono); font-size:11.5px; padding:3px 8px; border:1px solid var(--line); border-radius:4px; color:var(--ink); background:var(--surface)}
+.story{min-width:0; display:grid; gap:20px}
+.story h3{font-size:clamp(1.5rem, 3vw, 2rem); font-weight:700; letter-spacing:-.02em}
+.story .row{display:grid; grid-template-columns:96px minmax(0,1fr); gap:16px; max-width:44em}
+.story .row .label{padding-top:4px}
+.flow{display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:14px; background:var(--surface); border:1px solid var(--line); border-radius:8px}
+.flow span{font-family:var(--f-mono); font-size:12px; padding:5px 10px; border-radius:4px; background:var(--paper); border:1px solid var(--line)}
+.flow span.db{border-color:var(--accent); color:var(--accent); background:var(--accent-soft)}
+.flow i{font-style:normal; color:var(--muted); font-family:var(--f-mono)}
+
+/* Analysis strip */
+.do{display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:10px; overflow:hidden}
+.do div{background:var(--surface); padding:22px 20px; display:grid; gap:8px; align-content:start}
+.do h3{font-size:18px; font-weight:700; letter-spacing:-.01em}
+.do p{color:var(--muted); font-size:15px}
+
+/* Reports */
+.feature{display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:40px; padding:32px; background:var(--surface); border:1px solid var(--line); border-radius:10px; margin-bottom:20px}
+.feature .f-text{display:grid; gap:12px; align-content:start}
+.feature h3, .rcard h3{font-size:clamp(1.35rem, 2.6vw, 1.7rem); font-weight:700; letter-spacing:-.02em}
+.feature p, .rcard p{color:var(--muted); font-size:15.5px}
+.kind{color:var(--accent)}
+.stats{margin:0; display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:8px; overflow:hidden; align-self:start}
+.stats div{background:var(--paper); padding:18px 16px; display:grid; gap:6px}
+.stats dt{font-family:var(--f-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+.stats dd{margin:0; font-family:var(--f-display); font-weight:700; font-size:clamp(1.4rem, 2.8vw, 1.9rem); letter-spacing:-.02em; color:var(--accent); font-variant-numeric:tabular-nums; line-height:1.1}
+.stats dd span{font-family:var(--f-body); font-size:14px; font-weight:500; color:var(--muted); letter-spacing:0}
+.agrid{display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:20px}
+.rgrid{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:20px}
+.rcard{display:grid; gap:12px; align-content:start; padding:28px; border:1px solid var(--line); border-radius:10px}
+
+/* Toolkit */
+.kit{display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:28px 40px}
+.kit div{display:grid; gap:10px; align-content:start}
+
+/* Background */
+.bg{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); gap:48px}
+.bg .intro{font-size:19px; line-height:1.55; max-width:30em}
+.bg .intro + p{margin-top:16px; color:var(--muted); max-width:32em}
+.tl{list-style:none; margin:0; padding:0; display:grid}
+.tl li{display:grid; grid-template-columns:120px minmax(0,1fr); gap:16px; padding-block:14px; border-bottom:1px solid var(--line)}
+.tl li:first-child{padding-top:0}
+.tl .when{font-family:var(--f-mono); font-size:12.5px; color:var(--muted); padding-top:3px; font-variant-numeric:tabular-nums}
+.tl b{font-weight:600}
+.tl small{display:block; color:var(--muted); font-size:14.5px}
+
+/* Contact */
+.contact{padding-block:80px 64px}
+.contact h2{font-size:clamp(2rem, 5vw, 3.4rem); font-weight:800; letter-spacing:-.03em; max-width:16em}
+.contact p{margin-top:16px; color:var(--muted); max-width:32em}
+footer{padding-block:24px 40px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; color:var(--muted); border-top:1px solid var(--line)}
+
+@media (max-width: 860px){
+  .hero{grid-template-columns:minmax(0,1fr); gap:36px; padding-block:24px 56px}
+  .case{grid-template-columns:minmax(0,1fr); gap:20px}
+  .meta dl{grid-template-columns:repeat(2, minmax(0,1fr))}
+  .do{grid-template-columns:repeat(2, minmax(0,1fr))}
+  .kit{grid-template-columns:repeat(2, minmax(0,1fr))}
+  .bg{grid-template-columns:minmax(0,1fr); gap:32px}
+  .feature{grid-template-columns:minmax(0,1fr); gap:24px; padding:24px}
+  .rgrid{grid-template-columns:minmax(0,1fr)}
+  .agrid{grid-template-columns:repeat(2, minmax(0,1fr))}
+}
+@media (max-width: 520px){
+  body{font-size:16px}
+  section{padding-block:56px}
+  .story .row{grid-template-columns:minmax(0,1fr); gap:4px}
+  .do, .kit, .agrid{grid-template-columns:minmax(0,1fr)}
+  .tl li{grid-template-columns:minmax(0,1fr); gap:2px}
+  .top nav{gap:14px}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <span class="mark">Aliim Walid</span>
+    <nav aria-label="Sections">
+      <a href="#work">Work</a>
+      <a href="#analysis">Models</a>
+      <a href="#reports">Reports</a>
+      <a href="#toolkit">Toolkit</a>
+      <a href="#background">Background</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div>
+      <div class="who"><span class="dot" aria-hidden="true"></span><span class="label">Data &amp; Systems Analyst · Singapore</span></div>
+      <h1>I turn messy operations into <em>clean data</em>.</h1>
+      <p class="lede">I design and build the pipelines, databases and internal tools a business runs on, then use that data to forecast, report and recommend what to change. Most recently as the first and only analyst at a multi-outlet F&amp;B group.</p>
+      <div class="cta">
+        <a class="btn primary" href="#work">See the work</a>
+        <a class="btn" href="https://www.linkedin.com/in/abdulaliim/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+
+    <figure class="schematic" aria-label="Diagram of the data system: four sources feed an n8n ingestion layer, which loads PostgreSQL, which serves a sales dashboard, an ordering system and forecasts.">
+      <svg viewBox="0 0 560 330" role="img" aria-hidden="true">
+        <!-- wires: sources to ingest -->
+        <path id="w1" class="wire" d="M132 60 C 170 60, 160 165, 196 165"/>
+        <path id="w2" class="wire" d="M132 128 C 170 128, 160 165, 196 165"/>
+        <path id="w3" class="wire" d="M132 196 C 170 196, 160 165, 196 165"/>
+        <path id="w4" class="wire" d="M132 264 C 170 264, 160 165, 196 165"/>
+        <path id="w6" class="wire live" d="M300 165 L 324 165"/>
+        <path id="w7" class="wire" d="M432 165 C 450 165, 446 80, 462 80"/>
+        <path id="w8" class="wire" d="M432 165 L 462 165"/>
+        <path id="w9" class="wire" d="M432 165 C 450 165, 446 250, 462 250"/>
+
+        <!-- sources -->
+        <g>
+          <rect class="node" x="2" y="40" width="130" height="40" rx="5"/><text class="nt" x="14" y="58">Delivery app</text><text class="ns" x="14" y="72">API</text>
+          <rect class="node" x="2" y="108" width="130" height="40" rx="5"/><text class="nt" x="14" y="126">Kiosk orders</text><text class="ns" x="14" y="140">self-order</text>
+          <rect class="node" x="2" y="176" width="130" height="40" rx="5"/><text class="nt" x="14" y="194">Catering × 2</text><text class="ns" x="14" y="208">email HTML</text>
+          <rect class="node" x="2" y="244" width="130" height="40" rx="5"/><text class="nt" x="14" y="262">Supplier invoices</text><text class="ns" x="14" y="276">scanned · OCR</text>
+        </g>
+        <!-- ingest -->
+        <rect class="node hub" x="196" y="125" width="104" height="80" rx="6"/>
+        <text class="nt" x="208" y="158">n8n</text><text class="ns" x="208" y="174">parse · clean</text><text class="ns" x="208" y="188">scheduled</text>
+        <!-- database -->
+        <rect class="node hub" x="324" y="115" width="108" height="100" rx="6"/>
+        <ellipse cx="378" cy="115" rx="54" ry="9" fill="var(--accent-soft)" stroke="var(--accent)"/>
+        <text class="nt" x="337" y="160">PostgreSQL</text><text class="ns" x="337" y="176">Supabase</text><text class="ns" x="337" y="190">RLS · auth</text>
+        <!-- outputs -->
+        <rect class="node out" x="462" y="60" width="96" height="40" rx="5"/><text class="nt" x="472" y="78">Dashboard</text><text class="ns" x="472" y="92">daily sales</text>
+        <rect class="node out" x="462" y="145" width="96" height="40" rx="5"/><text class="nt" x="472" y="163">Ordering</text><text class="ns" x="472" y="177">CK · stock</text>
+        <rect class="node out" x="462" y="230" width="96" height="40" rx="5"/><text class="nt" x="472" y="248">Forecasts</text><text class="ns" x="472" y="262">par · P&amp;L</text>
+
+        <!-- packets -->
+        <circle class="pkt" r="3.5"><animateMotion dur="3.2s" repeatCount="indefinite"><mpath href="#w1"/></animateMotion></circle>
+        <circle class="pkt" r="3.5"><animateMotion dur="2.6s" begin="0.8s" repeatCount="indefinite"><mpath href="#w3"/></animateMotion></circle>
+        <circle class="pkt" r="3.5"><animateMotion dur="3.4s" begin="1.4s" repeatCount="indefinite"><mpath href="#w4"/></animateMotion></circle>
+        <circle class="pkt" r="3.5"><animateMotion dur="3s" begin="0.4s" repeatCount="indefinite"><mpath href="#w2"/></animateMotion></circle>
+        <circle class="pkt" r="3.5"><animateMotion dur="1.4s" repeatCount="indefinite"><mpath href="#w6"/></animateMotion></circle>
+        <circle class="pkt" r="3.5"><animateMotion dur="2.2s" begin="0.6s" repeatCount="indefinite"><mpath href="#w7"/></animateMotion></circle>
+        <circle class="pkt" r="3.5"><animateMotion dur="2.2s" begin="1.5s" repeatCount="indefinite"><mpath href="#w9"/></animateMotion></circle>
+      </svg>
+      <figcaption class="cap"><span class="label">The system I built</span><span class="mono" style="color:var(--muted)">sources → ingest → store → use</span></figcaption>
+    </figure>
+  </div>
+</div>
+
+<section id="work">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Selected work</h2>
+      <p>Built for real users at a multi-outlet F&amp;B group. Figures and company details are kept private.</p>
+    </div>
+
+    <article class="case">
+      <aside class="meta">
+        <span class="label kind">Data engineering</span>
+        <dl>
+          <div><dt>Year</dt><dd>2026</dd></div>
+          <div><dt>Scope</dt><dd>5 outlets · retail + catering</dd></div>
+        </dl>
+        <div class="tags"><span class="tag">n8n</span><span class="tag">PostgreSQL</span><span class="tag">SQL</span><span class="tag">JavaScript</span><span class="tag">Supabase</span><span class="tag">RLS</span></div>
+      </aside>
+      <div class="story">
+        <h3>Multi-channel sales pipeline &amp; dashboard</h3>
+        <div class="row"><span class="label">Problem</span><p>Sales came from a delivery app, self-order kiosks and two catering platforms. Most had no API, so data arrived as CSV attachments or plain email bodies, each with its own format and its own names for the same outlet.</p></div>
+        <div class="row"><span class="label">Built</span><p>Scheduled n8n workflows that read each report, parse the HTML or CSV, keep only confirmed orders, map every outlet to one code, and load clean rows into PostgreSQL. Product reports keep the item-and-modifier hierarchy so add-ons stay linked to their item. A custom dashboard sits on top, with company Google sign-in and row-level security: owners see every outlet, managers see their own.</p></div>
+        <div class="row"><span class="label">Result</span><p>One daily view of retail and catering sales across every channel, replacing manual copying from inboxes.</p></div>
+        <div class="flow" aria-label="Data flow"><span>Email &amp; CSV reports</span><i>→</i><span>n8n parse &amp; filter</span><i>→</i><span class="db">PostgreSQL</span><i>→</i><span>Dashboard</span></div>
+      </div>
+    </article>
+
+    <article class="case">
+      <aside class="meta">
+        <span class="label kind">Internal system</span>
+        <dl>
+          <div><dt>Period</dt><dd>Jan – Apr 2026</dd></div>
+          <div><dt>Users</dt><dd>Every outlet + central kitchen</dd></div>
+        </dl>
+        <div class="tags"><span class="tag">PostgreSQL</span><span class="tag">Database design</span><span class="tag">Supabase Auth</span><span class="tag">RLS</span><span class="tag">JavaScript</span></div>
+      </aside>
+      <div class="story">
+        <h3>Central Kitchen Ordering System</h3>
+        <div class="row"><span class="label">Problem</span><p>Outlets ordered stock from the central kitchen through chat messages. There was no reliable record of what was ordered, changed or delivered, and invoices were put together by hand.</p></div>
+        <div class="row"><span class="label">Built</span><p>A web app used daily by each outlet and the kitchen: store-locked logins, an order lifecycle (confirm, amend, void), sequential invoice numbers and printing, stock counts, store-to-store transfers, reports, real-time sync across devices and an accounting-ready CSV export. I later rebuilt its security, replacing client-side PINs with one auth account per store, custom token claims and row-level security, so each outlet sees only its own orders while the kitchen sees all.</p></div>
+        <div class="row"><span class="label">Result</span><p>Ordering, invoicing and stock counts in one system with a full audit trail.</p></div>
+        <div class="flow" aria-label="Data flow"><span>Outlet order</span><i>→</i><span>Kitchen confirm / amend</span><i>→</i><span class="db">PostgreSQL</span><i>→</i><span>Invoice &amp; accounts export</span></div>
+      </div>
+    </article>
+
+    <article class="case">
+      <aside class="meta">
+        <span class="label kind">Automation &amp; costing</span>
+        <dl>
+          <div><dt>Year</dt><dd>2025 – 2026</dd></div>
+          <div><dt>Scope</dt><dd>10+ suppliers · all outlets</dd></div>
+        </dl>
+        <div class="tags"><span class="tag">Python</span><span class="tag">pandas</span><span class="tag">openpyxl</span><span class="tag">OCR</span><span class="tag">Excel</span></div>
+      </aside>
+      <div class="story">
+        <h3>Ingredient costing &amp; invoice automation</h3>
+        <div class="row"><span class="label">Problem</span><p>Supplier invoices arrived as scanned documents across several outlets, so ingredient prices and spend were hard to track and recipes could not be costed with confidence.</p></div>
+        <div class="row"><span class="label">Built</span><p>OCR extraction of supplier invoices into structured data, then Python scripts to deduplicate ingredients across outlets and maintain an invoice log and a single ingredient master. I extended it into a procurement prototype with supplier ordering, three-way matching of purchase order, invoice and supplier statement, and a recipe costing builder.</p></div>
+        <div class="row"><span class="label">Result</span><p>One price list per ingredient, used for recipe costing and stock planning for new menu items.</p></div>
+        <div class="flow" aria-label="Data flow"><span>Scanned invoices</span><i>→</i><span>OCR</span><i>→</i><span>Python clean &amp; dedupe</span><i>→</i><span class="db">Ingredient master</span><i>→</i><span>Recipe costs</span></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="analysis">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Models &amp; analysis</h2>
+      <p>The systems exist so the business can decide faster. These are the working models I maintain on top of them, mostly in Excel.</p>
+    </div>
+
+    <article class="feature">
+      <div class="f-text">
+        <span class="label kind">Time-series forecasting · 2026</span>
+        <h3>Outlet sales forecasting</h3>
+        <p>Monthly and daily-average sales tracker for every outlet and the group, comparing this year against last. Each outlet has its own triple exponential smoothing (Holt-Winters) forecast with confidence intervals, tuned per outlet and scored on MASE, SMAPE and MAE so the team knows how far to trust each number. The forecasts feed each outlet's monthly sales target.</p>
+        <div class="tags"><span class="tag">Holt-Winters / ETS</span><span class="tag">Confidence intervals</span><span class="tag">MASE · SMAPE · MAE</span><span class="tag">Excel</span></div>
+      </div>
+      <dl class="stats">
+        <div><dt>Forecast error</dt><dd>4.7–9.5<span>% SMAPE</span></dd></div>
+        <div><dt>Coverage</dt><dd>5<span> outlets + group</span></dd></div>
+        <div><dt>History</dt><dd>2<span> years monthly</span></dd></div>
+        <div><dt>Method</dt><dd>ETS<span> α tuned per outlet</span></dd></div>
+      </dl>
+    </article>
+
+    <div class="agrid">
+      <article class="rcard">
+        <span class="label kind">Finance</span>
+        <h3>Monthly P&amp;L &amp; channel mix</h3>
+        <p>Group and per-outlet P&amp;L by month and quarter, split by sales channel with month-on-month change. Key events such as a delivery platform exit, going exclusive with one platform, a new outlet and the kiosk rollout are marked on the timeline so their effect on revenue and cost is visible. An outlet-level weekly version adds platform commission rates, supplier spend week on week, and progress against the sales target.</p>
+        <div class="tags"><span class="tag">P&amp;L</span><span class="tag">Channel analysis</span><span class="tag">Variance</span><span class="tag">KPI tracking</span></div>
+      </article>
+      <article class="rcard">
+        <span class="label kind">Pricing</span>
+        <h3>Menu pricing simulations</h3>
+        <p>A full year of item quantities across in-store and every delivery platform, combined with price and food cost per item, to simulate how price changes on signatures, classics and build-your-own add-ons would move sales and cost of goods. Used to plan the 2026 menu and meal set pricing.</p>
+        <div class="tags"><span class="tag">Scenario modelling</span><span class="tag">Food cost</span><span class="tag">Menu engineering</span></div>
+      </article>
+      <article class="rcard">
+        <span class="label kind">New product forecast</span>
+        <h3>Retail product line forecast</h3>
+        <p>Demand forecast for a new ready-to-eat range of sauces, chips and packed sandwiches sold through retail stores. Built from population and workforce data, shelf-price research and shelf-life limits, with low, mid and high scenarios by SKU, by month and by quarter, and the contribution margin needed to reach the group's growth goal.</p>
+        <div class="tags"><span class="tag">Market sizing</span><span class="tag">Scenarios</span><span class="tag">Contribution margin</span></div>
+      </article>
+      <article class="rcard">
+        <span class="label kind">Operations</span>
+        <h3>Hourly demand by outlet</h3>
+        <p>Orders by item and by hour for each outlet, with the top sellers ranked separately for the morning peak and the early afternoon. Used to set prep quantities and staffing for each part of the day, outlet by outlet.</p>
+        <div class="tags"><span class="tag">Pivot analysis</span><span class="tag">Demand patterns</span><span class="tag">Prep planning</span></div>
+      </article>
+      <article class="rcard">
+        <span class="label kind">Inventory</span>
+        <h3>Stock count &amp; valuation</h3>
+        <p>Count sheets for the central kitchen and every outlet that value stock on hand at the latest supplier price, split into direct and indirect inventory, with wastage logged separately. Linked to an ingredient master that tracks latest, lowest and highest price per supplier item and normalises everything to price per kilo.</p>
+        <div class="tags"><span class="tag">Inventory valuation</span><span class="tag">Wastage</span><span class="tag">Price tracking</span></div>
+      </article>
+      <article class="rcard">
+        <span class="label kind">Reporting</span>
+        <h3>Weekly management reports</h3>
+        <p>Weekly sales and performance reports for management, built on the systems above, with the changes each team needs to make and the platform rates to negotiate.</p>
+        <div class="tags"><span class="tag">Reporting</span><span class="tag">Stakeholder updates</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="reports">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Reports</h2>
+      <p>Written for management, auditors and a government programme. Each turns operational data into a decision or a record.</p>
+    </div>
+
+    <article class="feature">
+      <div class="f-text">
+        <span class="label kind">Feasibility study · Mar 2026</span>
+        <h3>New outlet financial feasibility</h3>
+        <p>Should the group open its fifth outlet in north-east Singapore? I sized the market bottom-up (TAM, SAM, SOM) from government population and planning data, scanned local competitors, and built the revenue model from three months of the network's own transaction data rather than industry benchmarks. Then I ran the store through unit economics, CAPEX payback, cash survival and free-cash-flow conversion tests across bear, base and bull cases, flagging every assumption still to be replaced with actuals.</p>
+        <p><b style="color:var(--ink)">Outcome:</b> recommended as feasible. The outlet opened in April 2026.</p>
+      </div>
+      <dl class="stats">
+        <div><dt>Verdict</dt><dd>Feasible</dd></div>
+        <div><dt>CAPEX payback</dt><dd>12–13<span> months</span></dd></div>
+        <div><dt>Bear case</dt><dd>−20<span>% revenue, still profitable</span></dd></div>
+        <div><dt>Tests</dt><dd>4 / 5<span> passed · 1 flagged</span></dd></div>
+      </dl>
+    </article>
+
+    <article class="feature">
+      <div class="f-text">
+        <span class="label kind">Impact report · 2026</span>
+        <h3>Outsourcing impact assessment</h3>
+        <p>Prepared for a national F&amp;B productivity programme. Measured what changed after three in-house sauces moved to a halal-certified contract manufacturer: man-hours, headcount, wastage and cost per unit, built from batch logs, wage costs and food cost per 2&nbsp;kg unit. Also documented the five-month recipe trial process and how staff were redeployed to a new outlet.</p>
+      </div>
+      <dl class="stats">
+        <div><dt>Prep time freed</dt><dd>~97<span> hrs / month</span></dd></div>
+        <div><dt>Outlet labour cost</dt><dd>−50<span>%</span></dd></div>
+        <div><dt>Wastage</dt><dd>15–20 → 3–5<span>%</span></dd></div>
+        <div><dt>Cost per unit</dt><dd>−18 to −53<span>%</span></dd></div>
+      </dl>
+    </article>
+
+    <div class="rgrid">
+      <article class="rcard">
+        <span class="label kind">Test plan · Apr 2026</span>
+        <h3>POS rollout acceptance testing</h3>
+        <p>UAT plan for a new POS system across counter POS, self-order kiosks, online ordering, back-office reporting, and security and user management. Defined scope, test cases with expected results, a defect log with severity and priority, and go-live criteria of zero open critical or high defects before stakeholder sign-off.</p>
+        <div class="tags"><span class="tag">UAT</span><span class="tag">Test cases</span><span class="tag">Defect tracking</span><span class="tag">Go-live sign-off</span></div>
+      </article>
+      <article class="rcard">
+        <span class="label kind">Process design · 2026</span>
+        <h3>Procurement user journey</h3>
+        <p>End-to-end map of ordering across outlet crew, suppliers, drivers and accounts: low-stock trigger, order, receiving with a discrepancy loop, invoice capture by OCR and PO matching, then month-end stock count and statement reconciliation before export to accounting. Each step names the screen and the data it records, so it doubled as the database spec.</p>
+        <div class="tags"><span class="tag">Process mapping</span><span class="tag">Three-way match</span><span class="tag">Requirements</span><span class="tag">Data model</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="toolkit">
+  <div class="wrap">
+    <div class="sec-head"><h2>Toolkit</h2></div>
+    <div class="kit">
+      <div><span class="label">Data</span><div class="tags"><span class="tag">SQL</span><span class="tag">PostgreSQL</span><span class="tag">Python</span><span class="tag">pandas</span><span class="tag">Excel</span></div></div>
+      <div><span class="label">Pipelines</span><div class="tags"><span class="tag">n8n</span><span class="tag">Supabase</span><span class="tag">REST APIs</span><span class="tag">Email parsing</span><span class="tag">OCR</span></div></div>
+      <div><span class="label">Build</span><div class="tags"><span class="tag">JavaScript</span><span class="tag">HTML / CSS</span><span class="tag">Auth &amp; RLS</span><span class="tag">Netlify</span></div></div>
+      <div><span class="label">Business</span><div class="tags"><span class="tag">Forecasting</span><span class="tag">P&amp;L analysis</span><span class="tag">Procurement</span><span class="tag">Inventory</span></div></div>
+      <div><span class="label">Integrations</span><div class="tags"><span class="tag">POS</span><span class="tag">Delivery platforms</span><span class="tag">Xero</span><span class="tag">CRM &amp; loyalty</span></div></div>
+      <div><span class="label">Learning next</span><div class="tags"><span class="tag">Machine learning</span><span class="tag">AI applications</span><span class="tag">Demand forecasting models</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="background">
+  <div class="wrap">
+    <div class="sec-head"><h2>Background</h2></div>
+    <div class="bg">
+      <div>
+        <p class="intro">I started in mechatronics and automation, moved into international business, then spent years close to F&amp;B operations before becoming the first analyst at a multi-outlet group.</p>
+        <p>I taught myself the stack on the job because the business needed it built. I like work where the analysis and the system behind it are the same job, and I'm now looking for a specialist data role where I can go deeper, including into ML and AI.</p>
+      </div>
+      <ol class="tl">
+        <li><span class="when">2025 – now</span><div><b>Data &amp; Systems Executive</b><small>Multi-outlet F&amp;B group, Singapore</small></div></li>
+        <li><span class="when">Earlier</span><div><b>Business Development Intern</b><small>Tech retail start-up</small></div></li>
+        <li><span class="when">Earlier</span><div><b>Student Advisor</b><small>AIA · financial advisory certifications</small></div></li>
+        <li><span class="when">Education</span><div><b>Bachelor of International Business</b><small>RMIT University</small></div></li>
+        <li><span class="when">Service</span><div><b>Silver Bayonet</b><small>Specialist Cadet School, National Service</small></div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<div class="wrap contact" id="contact">
+  <span class="label">Contact</span>
+  <h2>Have messy data and a business that needs it clean?</h2>
+  <p>I'm open to data analyst and data specialist roles in Singapore. The quickest way to reach me is LinkedIn.</p>
+  <div class="cta"><a class="btn primary" href="https://www.linkedin.com/in/abdulaliim/" target="_blank" rel="noopener">Message me on LinkedIn ↗</a></div>
+</div>
+
+<div class="wrap">
+  <footer><span>Abdul 'Aliim Bin Walid</span><span class="mono">Singapore · 2026</span></footer>
+</div>
+</body>
+</html>
